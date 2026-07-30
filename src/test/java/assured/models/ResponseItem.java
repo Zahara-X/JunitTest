@@ -1,7 +1,13 @@
 package assured.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
 
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ResponseItem{
 
 	@JsonProperty("image")
@@ -24,32 +30,4 @@ public class ResponseItem{
 
 	@JsonProperty("category")
 	private String category;
-
-	public String getImage(){
-		return image;
-	}
-
-	public Object getPrice(){
-		return price;
-	}
-
-	public Rating getRating(){
-		return rating;
-	}
-
-	public String getDescription(){
-		return description;
-	}
-
-	public int getId(){
-		return id;
-	}
-
-	public String getTitle(){
-		return title;
-	}
-
-	public String getCategory(){
-		return category;
-	}
 }

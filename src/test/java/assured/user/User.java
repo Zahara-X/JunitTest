@@ -1,11 +1,15 @@
-package assured;
+package assured.user;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
-
-public class User{
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class User {
 	private List<UserItem> user;
-
-	public List<UserItem> getUser(){
-		return user;
-	}
 }
