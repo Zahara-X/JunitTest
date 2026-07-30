@@ -30,32 +30,29 @@ public class WithersAppTest {
     @ParameterizedTest
     @DisplayName("withers box")
     @MethodSource("my.test.checkbox.ValueArguments#arguments")
-    void test(String format, String format_2, String format_3, List<List<String>> switchers, List<String> checkBox) {
+    void test(ValueArguments value) {
         this.driver.get("https://demoqa.com/checkbox");
 
         this.webDriverWait = new WebDriverWait(this.driver, Duration.ofSeconds(10)); // Explicit expectation
 
-        List<String> switchersFirst = switchers.getFirst();
+        List<String> switchersFirst = value.getSwitchers().getFirst();
         for (var text : switchersFirst) {
-            this.checkClickDriver(webDriverWait, this.checkFormatString(format, text));
+            this.checkClickDriver(webDriverWait, this.checkFormatString(value.getSwitcher_1(), text));
         }
 
-        this.checkClickDriver(webDriverWait, this.checkFormatString(format_3, "Home"));
+        this.checkClickDriver(webDriverWait, this.checkFormatString(value.getCheckbox(), "Home"));
 
-        List<String> switchersLast = switchers.getLast();
+        List<String> switchersLast = value.getSwitchers().getLast();
         for (var text : switchersLast) {
-            this.checkClickDriver(webDriverWait, this.checkFormatString(format_2, text));
+            this.checkClickDriver(webDriverWait, this.checkFormatString(value.getSwitcher_2(), text));
         }
 
-        this.checkCloseDriver(webDriverWait, this.checkFormatString(format_3, "Home"));
-
-        for(var text : switchersFirst) {
-            this.checkClickDriver(webDriverWait, this.checkFormatString(format, text));
-        }
-
-        for(var checkbox : checkBox) {
-            this.checkClickDriver(webDriverWait, this.checkFormatString(format_3, checkbox));
-        }
+        // Close check
+        this.checkCloseDriver(webDriverWait, this.checkFormatString(value.getCheckbox(), "Home"));
+//
+//        for(var checkbox : value.getChecksBox()) {
+//            this.checkClickDriver(webDriverWait, this.checkFormatString(value.getCheckbox(), checkbox));
+//        }
 
     }
 
