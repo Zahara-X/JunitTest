@@ -1,4 +1,4 @@
-package my.test;
+package my.test.checkbox;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -29,41 +29,33 @@ public class WithersAppTest {
 
     @ParameterizedTest
     @DisplayName("withers box")
-    @MethodSource("my.test.ValueArguments#arguments")
-    void test(String format, String format_2, String format_3, List<List<String>> texts) {
+    @MethodSource("my.test.checkbox.ValueArguments#arguments")
+    void test(String format, String format_2, String format_3, List<List<String>> switchers, List<String> checkBox) {
         this.driver.get("https://demoqa.com/checkbox");
 
         this.webDriverWait = new WebDriverWait(this.driver, Duration.ofSeconds(10)); // Explicit expectation
 
-        List<String> textFirst = texts.getFirst();
-        for (var text : textFirst) {
+        List<String> switchersFirst = switchers.getFirst();
+        for (var text : switchersFirst) {
             this.checkClickDriver(webDriverWait, this.checkFormatString(format, text));
         }
 
         this.checkClickDriver(webDriverWait, this.checkFormatString(format_3, "Home"));
 
-        List<String> textLast = texts.getLast();
-        for (var text : textLast) {
+        List<String> switchersLast = switchers.getLast();
+        for (var text : switchersLast) {
             this.checkClickDriver(webDriverWait, this.checkFormatString(format_2, text));
         }
 
         this.checkCloseDriver(webDriverWait, this.checkFormatString(format_3, "Home"));
 
-        for(var text : textFirst) {
+        for(var text : switchersFirst) {
             this.checkClickDriver(webDriverWait, this.checkFormatString(format, text));
         }
 
-        this.checkClickDriver(webDriverWait, this.checkFormatString(format_3, "Notes"));
-        this.checkClickDriver(webDriverWait, this.checkFormatString(format_3, "Commands"));
-        this.checkClickDriver(webDriverWait, this.checkFormatString(format_3, "React"));
-        this.checkClickDriver(webDriverWait, this.checkFormatString(format_3, "Angular"));
-        this.checkClickDriver(webDriverWait, this.checkFormatString(format_3, "Veu"));
-        this.checkClickDriver(webDriverWait, this.checkFormatString(format_3, "Public"));
-        this.checkClickDriver(webDriverWait, this.checkFormatString(format_3, "Private"));
-        this.checkClickDriver(webDriverWait, this.checkFormatString(format_3, "Classified"));
-        this.checkClickDriver(webDriverWait, this.checkFormatString(format_3, "General"));
-        this.checkClickDriver(webDriverWait, this.checkFormatString(format_3, "Word File.doc"));
-        this.checkClickDriver(webDriverWait, this.checkFormatString(format_3, "Excel File.doc"));
+        for(var checkbox : checkBox) {
+            this.checkClickDriver(webDriverWait, this.checkFormatString(format_3, checkbox));
+        }
 
     }
 
