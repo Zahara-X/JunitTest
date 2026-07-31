@@ -2,8 +2,12 @@ package my.test.checkbox;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvFileSource;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
+import org.junitpioneer.jupiter.RetryingTest;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -20,7 +24,7 @@ public class WithersAppTest {
     private final Logger logger = LoggerFactory.getLogger(WithersAppTest.class);
     private volatile ChromeDriver driver;
     private volatile WebDriverWait webDriverWait;
-
+    private static String data;
     @BeforeEach
     void start() {
         this.driver = new ChromeDriver();
@@ -35,36 +39,54 @@ public class WithersAppTest {
 
         this.webDriverWait = new WebDriverWait(this.driver, Duration.ofSeconds(10)); // Explicit expectation
 
+        this.openedSwitchers(value); // open
+        this.clickSwitcherDriver(webDriverWait, this.checkFormatString(value.getCheckbox(), "Home"));
+        data = this.getResultSelectedDriver(webDriverWait, value.getResult());
+        this.closedSwitchers(value); // close
+        this.openedSwitchers(value); // open
+        this.clickCheckBoxDriver(value); // click check
+        this.closedSwitchers(value); // close
+    }
+    @ParameterizedTest
+    @DisplayName("Проверяем данные")
+    @MethodSource("my.test.checkbox.ValueArguments#arguments")
+    void testResult(ValueArguments value) {
+         String oldData = value.getData();
+         String data_input = data.replace("You have selected :", "").trim();
+         String actual = oldData.replace("You have selected :", "").trim();
+         Assertions.assertAll(() -> Assertions.assertNotNull(actual, "Error data null"),
+                 () -> Assertions.assertNotNull(data_input, "Error data null"));
+         Assertions.assertEquals(data_input, actual, "Error, data not actual");
+    }
+    void openedSwitchers(ValueArguments value) {
         List<String> switchersFirst = value.getSwitchers().getFirst();
         for (var text : switchersFirst) {
-            this.checkClickDriver(webDriverWait, this.checkFormatString(value.getSwitcher_1(), text));
+            this.clickSwitcherDriver(webDriverWait, this.checkFormatString(value.getSwitcher(), text));
         }
-
-        this.checkClickDriver(webDriverWait, this.checkFormatString(value.getCheckbox(), "Home"));
-
+    }
+    void closedSwitchers(ValueArguments value) {
         List<String> switchersLast = value.getSwitchers().getLast();
         for (var text : switchersLast) {
-            this.checkClickDriver(webDriverWait, this.checkFormatString(value.getSwitcher_2(), text));
+            this.clickSwitcherDriver(webDriverWait, this.checkFormatString(value.getSwitcher(), text));
         }
-
-        // Close check
-        this.checkCloseDriver(webDriverWait, this.checkFormatString(value.getCheckbox(), "Home"));
-//
-//        for(var checkbox : value.getChecksBox()) {
-//            this.checkClickDriver(webDriverWait, this.checkFormatString(value.getCheckbox(), checkbox));
-//        }
-
     }
 
-    void checkClickDriver(WebDriverWait webDriverWait, final String value) {
+    void clickCheckBoxDriver(ValueArguments value) {
+        for(var checkbox : value.getChecksBox()) {
+            this.clickSwitcherDriver(webDriverWait, this.checkFormatString(value.getCheckbox(), checkbox));
+        }
+    }
+    void clickSwitcherDriver(WebDriverWait webDriverWait, final String value) {
         webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(value))).click();
     }
-    void checkCloseDriver(WebDriverWait webDriverWait, final String value) {
-       webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(value))).click();
+    public String getResultSelectedDriver(WebDriverWait webDriverWait, final String value) {
+        WebElement result = webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(value)));
+        return result.getText();
     }
     public String checkFormatString(String format, String value) {
         return String.format(format, value);
     }
+
     @AfterEach
     void stop() {
      if(this.driver != null && webDriverWait != null) {
