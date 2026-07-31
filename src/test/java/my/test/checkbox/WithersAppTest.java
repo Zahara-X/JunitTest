@@ -93,8 +93,7 @@ public class WithersAppTest {
          logger.info("Closing Chrome driver");
          driver.quit();
      } else {
-         logger.error("drive is null: {}", driver);
-         logger.error("WebDriverWait is null: {}", webDriverWait);
+        logger.error("Drive: {} or webDriverWait: {}", this.driver, this.webDriverWait);
      }
     }
 }
