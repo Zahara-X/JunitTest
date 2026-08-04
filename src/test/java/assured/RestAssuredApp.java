@@ -15,7 +15,7 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
 
-public class RestAssured {
+public class RestAssuredApp {
 
     @Test
     void getAllUsersTest() {

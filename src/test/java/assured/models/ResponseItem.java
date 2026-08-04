@@ -8,7 +8,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ResponseItem{
+public class ResponseItem {
 
 	@JsonProperty("image")
 	private String image;

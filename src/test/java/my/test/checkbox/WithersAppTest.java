@@ -2,10 +2,7 @@ package my.test.checkbox;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvFileSource;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.ValueSource;
-import org.junitpioneer.jupiter.RetryingTest;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -22,9 +19,9 @@ import java.util.List;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class WithersAppTest {
     private final Logger logger = LoggerFactory.getLogger(WithersAppTest.class);
+    private final StringBuilder builder = new StringBuilder();
     private volatile ChromeDriver driver;
     private volatile WebDriverWait webDriverWait;
-    private static String data;
     @BeforeEach
     void start() {
         this.driver = new ChromeDriver();
@@ -41,7 +38,7 @@ public class WithersAppTest {
 
         this.openedSwitchers(value); // open
         this.clickSwitcherDriver(webDriverWait, this.checkFormatString(value.getCheckbox(), "Home"));
-        data = this.getResultSelectedDriver(webDriverWait, value.getResult());
+        builder.append(this.getResultSelectedDriver(webDriverWait, value.getResult()));
         this.closedSwitchers(value); // close
         this.openedSwitchers(value); // open
         this.clickCheckBoxDriver(value); // click check
@@ -52,7 +49,7 @@ public class WithersAppTest {
     @MethodSource("my.test.checkbox.ValueArguments#arguments")
     void testResult(ValueArguments value) {
          String oldData = value.getData();
-         String data_input = data.replace("You have selected :", "").trim();
+         String data_input = builder.toString().replace("You have selected :", "").trim();
          String actual = oldData.replace("You have selected :", "").trim();
          Assertions.assertAll(() -> Assertions.assertNotNull(actual, "Error data null"),
                  () -> Assertions.assertNotNull(data_input, "Error data null"));
